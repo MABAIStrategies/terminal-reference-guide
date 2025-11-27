@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Command Reference Chart - MAB AI Strategies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .search-container {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input::placeholder {
+            color: #999;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-results {
+            background: #f0f4ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #333;
+            font-weight: 500;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+        
+        .header .branding {
+            font-size: 0.9em;
+            opacity: 0.85;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* TAB NAVIGATION */
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 16px 20px;
+            background: #f5f5f5;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: #efefef;
+            color: #333;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            background: white;
+        }
+
+        /* PAGE SYSTEM */
+        .pages-container {
+            display: flex;
+            height: auto;
+        }
+
+        .page {
+            width: 100%;
+            padding: 40px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .page-icon {
+            font-size: 1.8em;
+            margin-right: 15px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .section-icon {
+            font-size: 1.8em;
+            margin-right: 15px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.15);
+        }
+        
+        .card-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .command {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px 14px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 8px 0;
+            word-break: break-all;
+            overflow-x: auto;
+        }
+        
+        .where-to-run {
+            background: #e8f4f8;
+            border-left: 3px solid #0288d1;
+            padding: 10px 14px;
+            border-radius: 5px;
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .badge.windows {
+            background: #0078d4;
+        }
+        
+        .badge.mac {
+            background: #555555;
+        }
+        
+        .badge.linux {
+            background: #fcc624;
+            color: #333;
+        }
+        
+        .badge.all {
+            background: #4caf50;
+        }
+        
+        .mistake-card {
+            background: #ffebee;
+            border-left: 5px solid #d32f2f;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .mistake-title {
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .mistake-llm {
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 8px 0;
+            font-family: monospace;
+        }
+        
+        .mistake-reality {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 8px 0;
+            font-family: monospace;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .prompt-example {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+            color: #4a148c;
+        }
+        
+        .gotchas {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .gotchas h3 {
+            color: #d39e00;
+            margin-bottom: 15px;
+        }
+        
+        .gotcha-item {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .gotcha-problem {
+            color: #d32f2f;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .gotcha-solution {
+            color: #388e3c;
+        }
+        
+        .success-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .success-box h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .onboarding-checklist {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        
+        .checklist-text {
+            flex: 1;
+        }
+        
+        .quick-ref {
+            background: #f3f3f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .quick-ref h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .ref-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .ref-item:last-child {
+            border-bottom: none;
+        }
+        
+        .ref-command {
+            flex: 0 0 200px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .ref-arrow {
+            flex: 0 0 50px;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .ref-terminal {
+            flex: 1;
+            color: #555;
+        }
+
+        /* PAGE NAVIGATION */
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px 0;
+            gap: 20px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: #764ba2;
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            color: #666;
+            font-weight: 500;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+        }
+        
+        .footer .mab-credit {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .search-container {
+                display: none;
+            }
+            .tab-nav {
+                display: none;
+            }
+            .page-navigation {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+                margin: 0;
+            }
+            .page {
+                display: block;
+                page-break-after: always;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .ref-item {
+                flex-direction: column;
+            }
+            .ref-command, .ref-arrow, .ref-terminal {
+                flex: 1 1 auto;
+            }
+            .ref-arrow {
+                padding: 5px 0;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+            .tab-button {
+                min-width: 120px;
+                padding: 12px 12px;
+                font-size: 0.85em;
+            }
+            .page-navigation {
+                flex-direction: column;
+            }
+            .nav-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search all pages (e.g., 'npm install', 'command not found', 'powershell')...">
+            <div class="search-results" id="searchResults">Type to search...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ LLM COMMAND REFERENCE CHART</h1>
+            <p>When LLMs suggest commands, here's where to actually run them</p>
+            <div class="branding">
+                <p>📌 Professional Reference Tool | Perfect for Onboarding & Training</p>
+                <p style="font-size: 0.85em; margin-top: 10px;">Created by MAB AI Strategies • mark-bockrath.com</p>
+            </div>
+        </div>
+
+        <!-- TAB NAVIGATION -->
+        <div class="tab-nav" id="tabNav">
+            <button class="tab-button active" data-page="0">🔥 Top 10</button>
+            <button class="tab-button" data-page="1">🎯 Prompting</button>
+            <button class="tab-button" data-page="2">🖥️ Terminals</button>
+            <button class="tab-button" data-page="3">⚙️ Commands</button>
+            <button class="tab-button" data-page="4">🔴 Gotchas</button>
+        </div>
+
+        <!-- PAGES CONTAINER -->
+        <div class="pages-container">
+            <!-- PAGE 1: TOP 10 -->
+            <div class="page active" id="page-0">
+                <div class="page-header">
+                    <span class="page-icon">🔥</span>
+                    Top 10 Most Commonly Suggested by LLMs
+                </div>
+                <p style="margin-bottom: 25px; color: #666; font-size: 1.05em;">When LLMs give you these commands, here's where to run them:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">1️⃣ npm install</div>
+                        <div class="command">npm install</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Git Bash</strong><br>(Requires Node.js)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">2️⃣ npm start / npm run</div>
+                        <div class="command">npm start<br>npm run dev</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Git Bash</strong><br>(Requires Node.js)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">3️⃣ git clone / git push</div>
+                        <div class="command">git clone URL<br>git push origin main</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ Git Bash (Windows) or Terminal</strong><br>(Requires Git installed)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">4️⃣ pip install</div>
+                        <div class="command">pip install package<br>pip freeze</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Terminal</strong><br>(Requires Python installed)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">5️⃣ python script.py</div>
+                        <div class="command">python script.py<br>python -m venv env</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Terminal</strong><br>(Requires Python installed)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">6️⃣ docker build / run</div>
+                        <div class="command">docker build -t image .<br>docker run image</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell, Git Bash, or Docker Desktop</strong><br>(Requires Docker installed)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">7️⃣ ls, mkdir, cd (bash)</div>
+                        <div class="command">ls<br>mkdir folder<br>cd path</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ Git Bash (Windows) or Terminal</strong><br><strong>NOT PowerShell</strong></div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">8️⃣ npx</div>
+                        <div class="command">npx create-react-app<br>npx next@latest</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Git Bash</strong><br>(Requires Node.js, runs without install)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">9️⃣ yarn install</div>
+                        <div class="command">yarn install<br>yarn start</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ PowerShell or Git Bash</strong><br>(Requires Node.js + Yarn)</div>
+                    </div>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px; color: #333;">🔟 curl / wget</div>
+                        <div class="command">curl -X GET url<br>wget file-url</div>
+                        <div style="color: #666; font-size: 0.95em;"><strong>→ Git Bash, PowerShell, or Terminal</strong><br>(curl works in most shells)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: PROMPTING -->
+            <div class="page" id="page-1">
+                <div class="page-header">
+                    <span class="page-icon">🎯</span>
+                    How to Prompt LLMs to Avoid These Issues
+                </div>
+                <p style="margin-bottom: 25px; color: #666;">Use these prompt templates to train LLMs to give you better, clearer command suggestions:</p>
+                
+                <div class="prompt-example">
+                    <strong>❌ What doesn't work:</strong><br>
+                    "Help me set up a Node.js project"
+                </div>
+                
+                <div class="prompt-example" style="background: #e8f5e9; color: #2e7d32; border-left-color: #4caf50;">
+                    <strong>✅ Better prompt:</strong><br>
+                    "Help me set up a Node.js project. When you suggest terminal commands, ALWAYS tell me: (1) the exact terminal to use (PowerShell, Git Bash, or Terminal), (2) any prerequisites needed, (3) the full command to run. Make sure it works on Windows."
+                </div>
+
+                <div class="grid" style="margin-top: 20px;">
+                    <div class="card">
+                        <div class="card-title">🔴 Problematic Prompt</div>
+                        <div class="command">Generate a setup script for my project</div>
+                        <p style="color: #666; margin-top: 10px; font-size: 0.9em;">Result: LLM gives bash commands that won't work in PowerShell</p>
+                    </div>
+                    
+                    <div class="card" style="background: #e8f5e9; border-left-color: #4caf50;">
+                        <div class="card-title" style="color: #2e7d32;">✅ Better Prompt</div>
+                        <div class="command">Generate a setup script for my Windows project using PowerShell only. Include the terminal name before each command and explain what each line does.</div>
+                        <p style="color: #2e7d32; margin-top: 10px; font-size: 0.9em;">Result: Clear, Windows-compatible instructions</p>
+                    </div>
+                </div>
+
+                <div style="background: #f3e5f5; border-left: 5px solid #9c27b0; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <strong>🎯 Essential Prompt Instructions:</strong>
+                    <ul style="margin-top: 15px; margin-left: 20px; color: #4a148c;">
+                        <li style="margin: 8px 0;">Always state the terminal/IDE FIRST before showing any command</li>
+                        <li style="margin: 8px 0;">Include prerequisites (do you need Node? Git? Docker?)</li>
+                        <li style="margin: 8px 0;">Use platform-specific syntax (PowerShell vs bash)</li>
+                        <li style="margin: 8px 0;">Verify scripts work on all platforms you use</li>
+                        <li style="margin: 8px 0;">Add comments explaining what each command does</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h3>📌 Pro Tip for Consistency</h3>
+                    <p>Save this template as a system prompt or custom instruction:</p>
+                    <div class="command" style="margin-top: 10px;">"When suggesting terminal commands: 1) Always specify the terminal (PowerShell/Git Bash/Terminal). 2) Include prerequisites. 3) Show full commands. 4) Add explanations. 5) Test on Windows, Mac, and Linux if applicable."</div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: TERMINALS -->
+            <div class="page" id="page-2">
+                <div class="page-header">
+                    <span class="page-icon">🖥️</span>
+                    Understanding Different Terminals
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.3em;">What Terminal Am I Using?</h3>
+                    
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-title" style="color: #0078d4;">💙 PowerShell (Windows)</div>
+                            <p style="margin: 10px 0; color: #666;">Modern Windows terminal, uses <code>$</code> for variables</p>
+                            <div class="command">PS C:\Users\You> whoami</div>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Run:</strong> npm, python, docker, yaml</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title" style="color: #333;">⚫ Git Bash (Windows)</div>
+                            <p style="margin: 10px 0; color: #666;">Linux-like terminal for Windows, uses <code>$</code> prefix</p>
+                            <div class="command">user@computer MINGW64 /c/Users</div>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Run:</strong> git, bash, ls, mkdir, ./scripts</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title" style="color: #555;">🍎 Mac Terminal</div>
+                            <p style="margin: 10px 0; color: #666;">Default Mac terminal (zsh), shows <code>%</code> prompt</p>
+                            <div class="command">username@MacBook-Pro ~ %</div>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Run:</strong> git, bash, npm, python, ls</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title" style="color: #fcc624; color: #333;">🐧 Linux Terminal</div>
+                            <p style="margin: 10px 0; color: #666;">Linux terminal, shows <code>$</code> prompt (root shows #)</p>
+                            <div class="command">username@machine:~$ ls</div>
+                            <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><strong>Run:</strong> git, bash, npm, python, docker</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>✅ How to Check Your Terminal</h3>
+                    <div class="onboarding-checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox">
+                            <div class="checklist-text"><strong>Windows:</strong> Look for "PowerShell" or "Git Bash" in the title bar. Or type <code>Get-Host</code> in PowerShell</div>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox">
+                            <div class="checklist-text"><strong>Mac:</strong> Check prompt ends with <code>%</code> (zsh) or <code>$</code> (bash). Type <code>echo $SHELL</code></div>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox">
+                            <div class="checklist-text"><strong>Linux:</strong> Usually clear. Type <code>echo $SHELL</code> to confirm bash vs zsh</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: COMMANDS REFERENCE -->
+            <div class="page" id="page-3">
+                <div class="page-header">
+                    <span class="page-icon">⚙️</span>
+                    Quick Reference: Command Types & Terminals
+                </div>
+
+                <div class="quick-ref">
+                    <h3>⚡ Command → Terminal Mapping</h3>
+                    <div class="ref-item">
+                        <div class="ref-command">npm, node, yarn, pnpm</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">PowerShell or Git Bash (requires Node.js)</div>
+                    </div>
+                    <div class="ref-item">
+                        <div class="ref-command">git, gh</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">Git Bash (Windows) or Terminal (Mac/Linux)</div>
+                    </div>
+                    <div class="ref-item">
+                        <div class="ref-command">python, pip, conda</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">PowerShell or Terminal (requires Python)</div>
+                    </div>
+                    <div class="ref-item">
+                        <div class="ref-command">ls, mkdir, cd, cat, grep, ./script.sh</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">Git Bash (Windows) or Terminal (Mac/Linux)</div>
+                    </div>
+                    <div class="ref-item">
+                        <div class="ref-command">docker, docker-compose</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">PowerShell/Git Bash or Docker Desktop GUI</div>
+                    </div>
+                    <div class="ref-item">
+                        <div class="ref-command">aws, gcloud, az</div>
+                        <div class="ref-arrow">→</div>
+                        <div class="ref-terminal">PowerShell or Terminal (requires CLI installed)</div>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 40px;">
+                    <h3>📚 Understanding Terminal Compatibility</h3>
+                    <p style="margin-bottom: 15px;">Not all commands work in all terminals:</p>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="background: #f5f5f5;">
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Command Type</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">PowerShell</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Git Bash</th>
+                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Mac/Linux</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;"><strong>npm/node</strong></td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;"><strong>git</strong></td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;"><strong>bash commands (ls, cd, cat)</strong></td>
+                            <td style="padding: 10px; background: #ffebee;">❌ No</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;"><strong>./script.sh</strong></td>
+                            <td style="padding: 10px; background: #ffebee;">❌ No</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 10px;"><strong>export VAR=value</strong></td>
+                            <td style="padding: 10px; background: #ffebee;">❌ No ($env:VAR="value")</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                            <td style="padding: 10px; background: #e8f5e9;">✅ Yes</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE 5: GOTCHAS -->
+            <div class="page" id="page-4">
+                <div class="page-header">
+                    <span class="page-icon">🔴</span>
+                    Windows-Specific Gotchas & Solutions
+                </div>
+
+                <div class="gotchas">
+                    <h3>Common Windows Terminal Mistakes</h3>
+                    
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "command not found: ls"</div>
+                        <div class="gotcha-solution">✅ Use Git Bash instead of PowerShell. PowerShell doesn't understand bash commands. Git Bash gives you bash commands on Windows.</div>
+                    </div>
+                    
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "command not found: npm"</div>
+                        <div class="gotcha-solution">✅ Install Node.js. Restart your terminal after installation. Verify with: <code>node --version</code></div>
+                    </div>
+                    
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "./script.sh is not recognized"</div>
+                        <div class="gotcha-solution">✅ Use Git Bash, not PowerShell. Or run: <code>bash script.sh</code></div>
+                    </div>
+                    
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "command not found: sudo"</div>
+                        <div class="gotcha-solution">✅ Windows doesn't have sudo. Run PowerShell as Administrator instead (right-click → Run as Administrator)</div>
+                    </div>
+                    
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "export VAR=value" doesn't work in PowerShell</div>
+                        <div class="gotcha-solution">✅ PowerShell syntax: <code>$env:VAR = "value"</code>. Or use Git Bash for bash syntax.</div>
+                    </div>
+
+                    <div class="gotcha-item">
+                        <div class="gotcha-problem">❌ "Cannot be loaded because running scripts is disabled"</div>
+                        <div class="gotcha-solution">✅ PowerShell security policy. Run: <code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>📌 Team Standards</h3>
+                    <p style="margin-bottom: 15px;">Establish these standards across your team:</p>
+                    <ul style="margin-left: 20px; color: #2e7d32;">
+                        <li style="margin: 8px 0;">All terminal commands in documentation must include the terminal name</li>
+                        <li style="margin: 8px 0;">When sharing a command in chat, format as: <code>[Terminal] command here</code></li>
+                        <li style="margin: 8px 0;">Windows devs use Git Bash for bash commands, PowerShell for npm</li>
+                        <li style="margin: 8px 0;">Any new script must include a comment explaining how to run it</li>
+                        <li style="margin: 8px 0;">Reference this guide when unclear about terminal usage</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f0f4ff; border-left: 5px solid #1976d2; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                    <strong>💡 Pro Tip: If you don't know where to run a command, check the first word.</strong>
+                    <p style="margin-top: 10px; color: #333;">Most commands follow patterns: npm/git → terminal aware, bash commands (ls/cd) → Git Bash only, python/pip → PowerShell okay</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE NAVIGATION -->
+        <div class="page-navigation">
+            <button class="nav-button" id="prevBtn" onclick="previousPage()">← Previous</button>
+            <div class="page-indicator">
+                <span id="pageIndicator">Page 1 of 5</span>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="nextPage()">Next →</button>
+        </div>
+        
+        <div class="footer">
+            <p><strong>LLM Command Reference Chart</strong></p>
+            <p>A comprehensive guide to understanding which terminal to use for commands LLMs suggest</p>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #999;">
+                📥 Right-click → Save As to download. Or press Ctrl+P and choose "Save as PDF" to print all pages.
+            </p>
+            <div class="mab-credit">
+                <p>🚀 Created by MAB AI Strategies</p>
+                <p style="font-size: 0.9em; margin-top: 5px;">Helping teams understand AI-suggested commands | mark-bockrath.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const totalPages = 5;
+        const allCards = document.querySelectorAll('.card, .mistake-card');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved page from localStorage
+            const savedPage = localStorage.getItem('commandRefPage');
+            if (savedPage) {
+                currentPage = parseInt(savedPage);
+            }
+            updatePageDisplay();
+            setupTabButtons();
+        });
+
+        // Tab button setup
+        function setupTabButtons() {
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentPage = parseInt(this.getAttribute('data-page'));
+                    localStorage.setItem('commandRefPage', currentPage);
+                    updatePageDisplay();
+                });
+            });
+        }
+
+        // Update page display
+        function updatePageDisplay() {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show current page
+            document.getElementById('page-' + currentPage).classList.add('active');
+
+            // Update tabs
+            document.querySelectorAll('.tab-button').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === currentPage);
+            });
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentPage === 0;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages - 1;
+
+            // Update page indicator
+            document.getElementById('pageIndicator').textContent = `Page ${currentPage + 1} of ${totalPages}`;
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Navigation functions
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                localStorage.setItem('commandRefPage', currentPage);
+                updatePageDisplay();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                localStorage.setItem('commandRefPage', currentPage);
+                updatePageDisplay();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') previousPage();
+            if (e.key === 'ArrowRight') nextPage();
+        });
+
+        // Search functionality (searches all pages)
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+
+            if (!query) {
+                searchResults.textContent = 'Type to search all pages...';
+                allCards.forEach(card => card.classList.remove('hidden'));
+                return;
+            }
+
+            let matches = 0;
+            let suggestions = [];
+
+            const commandMaps = {
+                'npm': ['npm install', 'npm start', 'npm run'],
+                'git': ['git clone', 'git push', 'git commit', 'github'],
+                'python': ['python', 'pip install', 'python script'],
+                'pip': ['pip install', 'pip freeze'],
+                'docker': ['docker build', 'docker run', 'docker'],
+                'bash': ['ls', 'mkdir', 'cd', 'bash commands'],
+                'curl': ['curl', 'wget', 'http request'],
+                'command not found': ['command not found', 'not recognized'],
+                'powershell': ['powershell', '$env', 'windows terminal'],
+                'git bash': ['git bash', 'windows bash'],
+                'terminal': ['terminal', 'terminal type', 'which terminal'],
+                'error': ['error', 'mistake', 'gotcha', 'problem']
+            };
+
+            allCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                const isMatch = text.includes(query);
+
+                if (isMatch) {
+                    matches++;
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            for (const [key, related] of Object.entries(commandMaps)) {
+                if (key.includes(query) || related.some(r => r.includes(query))) {
+                    if (!suggestions.includes(key)) {
+                        suggestions.push(key);
+                    }
+                }
+            }
+
+            if (matches === 0) {
+                searchResults.textContent = `No results found. Try: ${suggestions.slice(0, 2).join(', ') || 'npm, git, python, docker, bash'}`;
+            } else {
+                searchResults.textContent = `Found ${matches} matching item${matches !== 1 ? 's' : ''} across all pages`;
+            }
+        });
+
+        // Escape to clear search
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                this.dispatchEvent(new Event('input'));
+                this.focus();
+            }
+        });
+    </script>
+</body>
+</html>
